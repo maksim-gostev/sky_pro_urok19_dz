@@ -17,6 +17,7 @@ class Movie(db.Model):
     director = db.relationship("Director")
 
 
+
 class MovieSchema(Schema):
     id = fields.Int()
     title = fields.Str()

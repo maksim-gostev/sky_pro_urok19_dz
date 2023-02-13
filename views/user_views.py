@@ -9,11 +9,12 @@ user_ns = Namespace('users')
 users_schema = UserSchema(many=True)
 user_schema = UserSchema()
 
+
 @user_ns.route('')
 class UsersView(Resource):
     def get(self):
-      users = user_service.get_all()
-      return users_schema.dump(users), 200
+        users = user_service.get_all()
+        return users_schema.dump(users), 200
 
     def post(self):
         req_json = request.json
@@ -23,6 +24,7 @@ class UsersView(Resource):
 
         user = user_service.create(req_json)
         return user_schema.dump(user), 201
+
 
 @user_ns.route('/<int:uid>')
 class UserView(Resource):

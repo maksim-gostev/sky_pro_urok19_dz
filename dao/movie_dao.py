@@ -6,7 +6,7 @@ class MovieDAO:
         self.session = session
 
     def get_one(self, bid):
-        return self.session.query(Movie).get(bid)
+        return self.session.get(bid)
 
     def get_all(self):
         # А еще можно сделать так, вместо всех методов get_by_*

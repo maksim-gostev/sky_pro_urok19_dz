@@ -6,6 +6,7 @@ from setup_db import db
 from views.directors_views import director_ns
 from views.genres_views import genre_ns
 from views.movies_views import movie_ns
+from views.user_views import user_ns
 
 
 def create_app(config_object):
@@ -21,10 +22,11 @@ def register_extensions(app):
     api.add_namespace(director_ns)
     api.add_namespace(genre_ns)
     api.add_namespace(movie_ns)
+    api.add_namespace(user_ns)
 
 
 app = create_app(Config())
 app.debug = True
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=10001, debug=True)
+    app.run()
