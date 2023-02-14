@@ -28,3 +28,6 @@ class UserDAO:
 
         self.session.add(user)
         self.session.commit()
+
+    def get_by_username(self, username):
+        return self.session.query(User).filter(User.username == username).first()

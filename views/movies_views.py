@@ -3,12 +3,17 @@ from flask_restx import Resource, Namespace
 
 from dao.model.movie import MovieSchema
 from implemented import movie_service
+from service.decorators import auth_required, admin_required
 
 movie_ns = Namespace('movies')
 
+movies_schema = MovieSchema(many=True)
+movie_schema = MovieSchema()
 
-@movie_ns.route('/')
+
+@movie_ns.route('')
 class MoviesView(Resource):
+    @auth_required
     def get(self):
         director = request.args.get("director_id")
         genre = request.args.get("genre_id")
@@ -19,29 +24,39 @@ class MoviesView(Resource):
             "year": year,
         }
         all_movies = movie_service.get_all(filters)
-        res = MovieSchema(many=True).dump(all_movies)
-        return res, 200
 
+        return movies_schema.dump(all_movies), 200
+
+    @admin_required
     def post(self):
         req_json = request.json
-        movie = movie_service.create(req_json)
-        return "", 201, {"location": f"/movies/{movie.id}"}
+        if not req_json:
+            return "вы не ввели данные", 404
+        movie_service.create(req_json)
+        return "", 201
 
 
-@movie_ns.route('/<int:bid>')
+@movie_ns.route('/<int:mid>')
 class MovieView(Resource):
-    def get(self, bid):
-        b = movie_service.get_one(bid)
-        sm_d = MovieSchema().dump(b)
-        return sm_d, 200
+    @auth_required
+    def get(self, mid):
+        movie = movie_service.get_one(mid)
+        if not movie:
+            return "такого фильма нет", 404
+        return movie_schema.dump(movie), 200
 
-    def put(self, bid):
+    @admin_required
+    def put(self, mid):
         req_json = request.json
-        if "id" not in req_json:
-            req_json["id"] = bid
-        movie_service.update(req_json)
-        return "", 204
+        if not req_json:
+            return "вы не ввели данные", 404
 
-    def delete(self, bid):
-        movie_service.delete(bid)
+        req_json['id'] = mid
+
+        movie = movie_service.update(req_json)
+        return movie_schema.dump(movie), 204
+
+    @admin_required
+    def delete(self, mid):
+        movie_service.delete(mid)
         return "", 204
