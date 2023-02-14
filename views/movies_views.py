@@ -11,7 +11,7 @@ movies_schema = MovieSchema(many=True)
 movie_schema = MovieSchema()
 
 
-@movie_ns.route('')
+@movie_ns.route('/')
 class MoviesView(Resource):
     @auth_required
     def get(self):
