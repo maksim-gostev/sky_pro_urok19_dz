@@ -15,5 +15,5 @@ class AuthView(Resource):
 
     def put(self):
         req_json = request.json
-        res = authorization(req_json)
+        res = authorization_put(req_json)
         return res
