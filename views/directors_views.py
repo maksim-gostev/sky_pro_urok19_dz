@@ -12,12 +12,12 @@ director_schema = DirectorSchema()
 
 @director_ns.route('/')
 class DirectorsView(Resource):
-    @auth_required
+    # @auth_required
     def get(self):
         directors = director_service.get_all()
         return directors_schema.dump(directors), 200
 
-    @admin_required
+    # @admin_required
     def post(self):
         req_json = request.json
         if not req_json:

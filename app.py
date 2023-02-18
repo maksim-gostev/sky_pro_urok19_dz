@@ -1,6 +1,6 @@
+
 from flask import Flask
 from flask_restx import Api
-
 from config import Config
 from setup_db import db
 from views.directors_views import director_ns
@@ -30,5 +30,11 @@ def register_extensions(app):
 app = create_app(Config())
 app.debug = True
 
+with app.app_context():
+    db.drop_all()
+    db.create_all()
+
+
 if __name__ == '__main__':
     app.run()
+
